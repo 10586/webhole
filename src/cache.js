@@ -73,7 +73,7 @@ class Cache {
                 store=tx.objectStore('comment');
                 get_req=store.get(pid);
             } catch(e) { // ios sometimes fail at here, just ignore it
-                console.exception(e);
+                console.error(e);
                 resolve(null);
             }
             get_req.onsuccess=()=>{
@@ -118,7 +118,7 @@ class Cache {
                 if(++this.added_items_since_maintenance===MAINTENANCE_STEP)
                     setTimeout(this.maintenance.bind(this),1);
             } catch(e) {
-                console.exception(e);
+                console.error(e);
                 return resolve();
             }
         });
@@ -135,7 +135,7 @@ class Cache {
                 const store=tx.objectStore('comment');
                 req=store.delete(pid);
             } catch(e) {
-                console.exception(e);
+                console.error(e);
                 return resolve();
             }
             //console.log('comment cache delete',pid);
@@ -181,7 +181,7 @@ class Cache {
             indexedDB.deleteDatabase(HOLE_CACHE_DB_NAME);
             console.log('delete comment cache db');
         } catch(e) {
-            console.exception(e);
+            console.error(e);
         }
     }
 };

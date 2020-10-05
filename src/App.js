@@ -8,6 +8,7 @@ import {load_config,bgimg_style} from './Config';
 import {listen_darkmode} from './infrastructure/functions';
 import {LoginPopup, TitleLine} from './infrastructure/widgets';
 import {cache} from './cache';
+import {CaptchaRoot} from './Captcha';
 
 const MAX_SIDEBAR_STACK_SIZE=10;
 
@@ -97,7 +98,7 @@ class App extends Component {
                         token: x,
                     });
                 },
-            }}>
+            }}><CaptchaRoot>
                 <PressureHelper callback={this.on_pressure_bound} />
                 <div className="bg-img" style={bgimg_style()} />
                 <Title show_sidebar={this.show_sidebar_bound} set_mode={this.set_mode_bound} />
@@ -128,7 +129,7 @@ class App extends Component {
                     </div>
                 )}</TokenCtx.Consumer>
                 <Sidebar show_sidebar={this.show_sidebar_bound} stack={this.state.sidebar_stack} />
-            </TokenCtx.Provider>
+            </CaptchaRoot></TokenCtx.Provider>
         );
     }
 }

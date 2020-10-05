@@ -9,6 +9,7 @@ import {AudioWidget} from './AudioWidget';
 import {TokenCtx, ReplyForm} from './UserAction';
 
 import {API, PKUHELPER_ROOT} from './flows_api';
+import {CaptchaClient} from './Captcha';
 
 const IMAGE_BASE=PKUHELPER_ROOT+'services/pkuhole/images/';
 const AUDIO_BASE=PKUHELPER_ROOT+'services/pkuhole/audios/';
@@ -60,6 +61,9 @@ function load_single_meta(show_sidebar,token) {
                     <div className="box box-tip">
                         <p><a onClick={()=>load_single_meta(show_sidebar,token)(pid,true)}>重新加载</a></p>
                         <p>{''+e}</p>
+                        {e==='CAPTCHA' &&
+                            <CaptchaClient onFinish={()=>load_single_meta(show_sidebar,token)(pid,true)} />
+                        }
                     </div>,
                     'replace'
                 );
@@ -410,8 +414,13 @@ class FlowSidebar extends PureComponent {
                 {!this.state.rev &&
                     main_thread_elem
                 }
-                {!!this.state.error_msg &&
+                {this.state.error_msg==='CAPTCHA' &&
                     <div className="box box-tip flow-item">
+                        <CaptchaClient onFinish={()=>this.load_replies()} />
+                    </div>
+                }
+                {!!this.state.error_msg &&
+                <div className="box box-tip flow-item">
                         <p>回复加载失败</p>
                         <p>{this.state.error_msg}</p>
                     </div>
@@ -486,6 +495,14 @@ class FlowItemRow extends PureComponent {
                 }),callback);
             })
             .catch((e)=>{
+                if(e==='CAPTCHA') {
+                    this.setState({
+                        replies: [],
+                        reply_status: 'captcha',
+                    });
+                    return;
+                }
+
                 console.error(e);
                 this.setState({
                     replies: [],
@@ -543,6 +560,11 @@ class FlowItemRow extends PureComponent {
                         <div className="box box-tip">
                             <p><a onClick={()=>{this.load_replies()}}>重新加载评论</a></p>
                             <p>{this.state.reply_error}</p>
+                        </div>
+                    }
+                    {this.state.reply_status==='captcha' &&
+                        <div className="box box-tip">
+                            <CaptchaClient onFinish={()=>this.load_replies()} />
                         </div>
                     }
                     {this.state.replies.slice(0,PREVIEW_REPLY_COUNT).map((reply)=>(

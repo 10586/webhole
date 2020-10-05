@@ -27,6 +27,8 @@ export const API={
                     if(json.msg) throw new Error(json.msg);
                     else throw new Error(JSON.stringify(json));
                 }
+                if(json.captcha)
+                    throw 'CAPTCHA';
 
                 cache().delete(pid).then(()=>{
                     cache().put(pid,cache_version,json);
