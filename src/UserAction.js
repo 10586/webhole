@@ -334,9 +334,9 @@ export class LoginForm extends Component {
         return (
             <TokenCtx.Consumer>{(token)=>
                 <div>
-                    {!!token.value &&
+                    {/*!!token.value &&
                         <LifeInfoBox token={token.value} set_token={token.set_value} />
-                    }
+                    */}
                     <div className="login-form box">
                         {token.value ?
                             <div>
@@ -348,7 +348,7 @@ export class LoginForm extends Component {
                                     <br />
                                 </p>
                                 <p>
-                                    根据计算中心要求，访问授权三个月内有效，过期需重新登录。
+                                    根据相关要求，访问授权三个月内有效，过期需重新登录。
                                 </p>
                                 <p>
                                     <a onClick={()=>{this.props.show_sidebar(
@@ -360,6 +360,11 @@ export class LoginForm extends Component {
                                 <p>
                                     <a onClick={this.copy_token.bind(this,token.value)}>复制 User Token</a><br />
                                     User Token 用于迁移登录状态，切勿告知他人，若怀疑被盗号请尽快 <ResetUsertokenWidget token={token.value} />
+                                </p>
+                                <p>
+                                    <a href="https://pkuhelper.pku.edu.cn/api/outlinks/disable/index.php" target="_blank">撤销信息授权</a>
+                                    <br />
+                                    警告：此操作会撤销您对 PKU Helper 的信息授权，并删除您账号下的数据
                                 </p>
                             </div> :
                             <LoginPopup token_callback={token.set_value}>{(do_popup)=>(
